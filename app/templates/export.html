@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Export Center — VenturPilot AI{% endblock %}
+
+{% block content %}
+<div class="export-page pt-5 mt-3">
+  <div class="hero-glow hero-glow-1" style="top:10%;right:5%;"></div>
+  <div class="container-xl py-5 position-relative z-1">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <span class="badge badge-ibm mb-3"><i class="bi bi-download me-1"></i>Export Center</span>
+      <h1 class="section-title">Export Your <span class="gradient-text">Startup Assets</span></h1>
+      <p class="text-muted mt-2">Download your complete startup blueprint in multiple formats. All exports saved to IBM Cloud Object Storage.</p>
+    </div>
+
+    <!-- Blueprint status check -->
+    <div id="noBlueprintWarning" class="alert alert-warning d-none mb-4" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      No blueprint found in session. <a href="/generate" class="alert-link">Generate a blueprint first</a> to enable exports.
+    </div>
+
+    <div class="row g-4 justify-content-center" data-aos="fade-up">
+
+      <!-- Blueprint PDF -->
+      <div class="col-md-6 col-lg-3">
+        <div class="export-card glass-card p-4 text-center h-100">
+          <div class="export-icon mb-3"><i class="bi bi-file-earmark-pdf-fill text-danger"></i></div>
+          <h5 class="fw-bold mb-2">Blueprint PDF</h5>
+          <p class="text-muted small mb-4">Complete startup blueprint with all sections, SWOT, roadmap, budget, and legal checklist.</p>
+          <div class="d-flex gap-2 flex-column">
+            <button class="btn btn-danger fw-semibold" onclick="exportBlueprintPDF()">
+              <i class="bi bi-download me-2"></i>Download Blueprint PDF
+            </button>
+            <small class="text-muted">Saved to IBM COS automatically</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pitch Deck PDF -->
+      <div class="col-md-6 col-lg-3">
+        <div class="export-card glass-card p-4 text-center h-100">
+          <div class="export-icon mb-3"><i class="bi bi-file-earmark-slides-fill text-warning"></i></div>
+          <h5 class="fw-bold mb-2">Pitch Deck PDF</h5>
+          <p class="text-muted small mb-4">10-slide investor pitch deck with cover, problem, solution, market, traction, and the ask.</p>
+          <div class="d-flex gap-2 flex-column">
+            <button class="btn btn-warning text-dark fw-semibold" onclick="exportPitchDeckPDF()">
+              <i class="bi bi-download me-2"></i>Download Pitch Deck PDF
+            </button>
+            <small class="text-muted">Saved to IBM COS automatically</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- JSON Report -->
+      <div class="col-md-6 col-lg-3">
+        <div class="export-card glass-card p-4 text-center h-100">
+          <div class="export-icon mb-3"><i class="bi bi-filetype-json text-success"></i></div>
+          <h5 class="fw-bold mb-2">JSON Report</h5>
+          <p class="text-muted small mb-4">Raw structured JSON containing the complete blueprint data — perfect for developers and integrations.</p>
+          <div class="d-flex gap-2 flex-column">
+            <button class="btn btn-success fw-semibold" onclick="exportJSON()">
+              <i class="bi bi-download me-2"></i>Download JSON Report
+            </button>
+            <small class="text-muted">Saved to IBM COS automatically</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canvas PDF -->
+      <div class="col-md-6 col-lg-3">
+        <div class="export-card glass-card p-4 text-center h-100">
+          <div class="export-icon mb-3"><i class="bi bi-grid-fill text-accent"></i></div>
+          <h5 class="fw-bold mb-2">Business Model Canvas</h5>
+          <p class="text-muted small mb-4">Standalone BMC PDF with all nine canvas sections filled with your AI-generated content.</p>
+          <div class="d-flex gap-2 flex-column">
+            <button class="btn btn-accent fw-semibold" onclick="exportBlueprintPDF()">
+              <i class="bi bi-download me-2"></i>Download BMC PDF
+            </button>
+            <small class="text-muted">Saved to IBM COS automatically</small>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COS Status -->
+    <div class="glass-card p-4 mt-5" data-aos="fade-up">
+      <h6 class="fw-bold mb-3"><i class="bi bi-cloud-check me-2 text-accent"></i>IBM Cloud Object Storage Status</h6>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success rounded-circle" style="width:10px;height:10px;padding:0;">&nbsp;</span>
+            <span class="small">Reports Bucket</span>
+            <code class="small text-muted ms-auto">startup-reports</code>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success rounded-circle" style="width:10px;height:10px;padding:0;">&nbsp;</span>
+            <span class="small">Resources Bucket</span>
+            <code class="small text-muted ms-auto">startup-resources</code>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success rounded-circle" style="width:10px;height:10px;padding:0;">&nbsp;</span>
+            <span class="small">Knowledge Base Bucket</span>
+            <code class="small text-muted ms-auto">startup-knowledge-base</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const bp = JSON.parse(sessionStorage.getItem("blueprint") || "null");
+if (!bp) document.getElementById("noBlueprintWarning").classList.remove("d-none");
+
+async function doExport(url, filename, bodyData) {
+  const btn = event.target;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Preparing...';
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(bodyData)
+    });
+    if (!resp.ok) throw new Error(await resp.text());
+    const blob = await resp.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Downloaded!';
+    setTimeout(() => { btn.disabled = false; btn.innerHTML = btn.innerHTML.replace("Downloaded!", btn.getAttribute("data-orig") || "Download"); }, 2500);
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-exclamation-triangle me-2"></i>Error — Retry';
+    alert("Export failed: " + e.message);
+  }
+}
+
+function exportBlueprintPDF() { doExport("/api/export/blueprint-pdf", "startup_blueprint.pdf", {blueprint: bp}); }
+function exportPitchDeckPDF() { doExport("/api/export/pitch-deck-pdf", "pitch_deck.pdf", {blueprint: bp}); }
+function exportJSON() { doExport("/api/export/json", "startup_blueprint.json", {blueprint: bp}); }
+</script>
+{% endblock %}

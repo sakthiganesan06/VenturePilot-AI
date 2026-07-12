@@ -1,0 +1,1 @@
+Startup Valuation Methods: Pre-revenue — Scorecard Method (compare to avg seed deal ₹50L-₹3Cr), Berkus Method (up to ₹2.5Cr for 5 factors), Cost-to-Duplicate. Post-revenue — Revenue Multiple (SaaS: 8-15x ARR), Discounted Cash Flow (rarely used early-stage), Comparable Transactions (look at recent India startup deals). Typical seed valuation in India: ₹3Cr-₹15Cr pre-money.

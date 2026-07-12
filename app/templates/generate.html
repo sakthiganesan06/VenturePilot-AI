@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% block title %}Generate Startup Blueprint — VenturPilot AI{% endblock %}
+
+{% block content %}
+<div class="generate-page">
+  <div class="hero-glow hero-glow-1" style="top:10%;left:20%;"></div>
+  <div class="hero-glow hero-glow-2" style="top:40%;right:10%;"></div>
+
+  <div class="container-xl py-5 mt-4 position-relative z-1">
+
+    <!-- Header -->
+    <div class="text-center mb-5" data-aos="fade-down">
+      <span class="badge badge-ibm mb-3"><i class="bi bi-stars me-1"></i>IBM Granite AI + RAG</span>
+      <h1 class="section-title">Generate Your <span class="gradient-text">Startup Blueprint</span></h1>
+      <p class="text-muted mt-2">Fill in the details below. IBM Granite will create your complete startup blueprint in under 60 seconds.</p>
+    </div>
+
+    <!-- Form -->
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <form id="blueprintForm" class="glass-card p-4 p-lg-5" data-aos="fade-up">
+
+          <!-- Row 1 -->
+          <div class="mb-4">
+            <label class="form-label fw-semibold"><i class="bi bi-lightbulb-fill text-accent me-2"></i>Startup Idea <span class="text-danger">*</span></label>
+            <textarea name="idea" id="idea" class="form-control bg-dark border-secondary text-white" rows="4"
+              placeholder="Describe your startup idea clearly — what problem does it solve and for whom?..." required></textarea>
+            <div class="form-text text-muted">Be specific. Better description = better blueprint.</div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-building me-2 text-accent"></i>Industry</label>
+              <select name="industry" id="industry" class="form-select bg-dark border-secondary text-white">
+                <option value="SaaS/Software">SaaS / Software</option>
+                <option value="FinTech">FinTech</option>
+                <option value="HealthTech">HealthTech / MedTech</option>
+                <option value="EdTech">EdTech</option>
+                <option value="AgriTech">AgriTech</option>
+                <option value="CleanTech">CleanTech / GreenTech</option>
+                <option value="E-Commerce">E-Commerce / D2C</option>
+                <option value="Marketplace">Marketplace</option>
+                <option value="DeepTech/AI">DeepTech / AI / ML</option>
+                <option value="Logistics">Logistics / Supply Chain</option>
+                <option value="HRTech">HRTech / WorkTech</option>
+                <option value="LegalTech">LegalTech</option>
+                <option value="PropTech">PropTech</option>
+                <option value="Gaming">Gaming / Metaverse</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-flag me-2 text-accent"></i>Startup Stage</label>
+              <select name="stage" id="stage" class="form-select bg-dark border-secondary text-white">
+                <option value="Idea">💡 Idea Stage</option>
+                <option value="Pre-Seed">🌱 Pre-Seed</option>
+                <option value="Seed">🚀 Seed Stage</option>
+                <option value="Early Growth">📈 Early Growth</option>
+                <option value="Scaling">⚡ Scaling</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-people-fill me-2 text-accent"></i>Target Customers</label>
+              <input type="text" name="target_customers" class="form-control bg-dark border-secondary text-white"
+                placeholder="e.g. Small business owners, college students, hospitals..." />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-geo-alt-fill me-2 text-accent"></i>Country / Market</label>
+              <select name="country" class="form-select bg-dark border-secondary text-white">
+                <option value="India" selected>🇮🇳 India</option>
+                <option value="USA">🇺🇸 USA</option>
+                <option value="UK">🇬🇧 UK</option>
+                <option value="Southeast Asia">🌏 Southeast Asia</option>
+                <option value="Global">🌍 Global</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-cash-stack me-2 text-accent"></i>Available Budget</label>
+              <select name="budget" class="form-select bg-dark border-secondary text-white">
+                <option value="Under ₹5 Lakhs">Under ₹5 Lakhs</option>
+                <option value="₹5L - ₹25L" selected>₹5L – ₹25 Lakhs</option>
+                <option value="₹25L - ₹1Cr">₹25L – ₹1 Crore</option>
+                <option value="₹1Cr - ₹5Cr">₹1Cr – ₹5 Crore</option>
+                <option value="₹5Cr+">₹5 Crore+</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-person-workspace me-2 text-accent"></i>Team Size</label>
+              <select name="team_size" class="form-select bg-dark border-secondary text-white">
+                <option value="Solo founder">Solo Founder</option>
+                <option value="2 co-founders" selected>2 Co-founders</option>
+                <option value="3-5 people">3–5 People</option>
+                <option value="6-10 people">6–10 People</option>
+                <option value="10+ people">10+ People</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold"><i class="bi bi-bullseye me-2 text-accent"></i>Business Goals</label>
+            <textarea name="goals" class="form-control bg-dark border-secondary text-white" rows="2"
+              placeholder="e.g. Build 500 paying users in 12 months, raise ₹1Cr seed round, expand to 3 cities..."></textarea>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-box-seam me-2 text-accent"></i>Existing Product / MVP?</label>
+              <select name="existing_product" class="form-select bg-dark border-secondary text-white">
+                <option value="None">No — just an idea</option>
+                <option value="Wireframes">Wireframes / Design</option>
+                <option value="Prototype">Prototype</option>
+                <option value="MVP">Working MVP</option>
+                <option value="Live Product">Live Product with Users</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold"><i class="bi bi-chat-square-text me-2 text-accent"></i>Additional Notes</label>
+              <input type="text" name="notes" class="form-control bg-dark border-secondary text-white"
+                placeholder="Any specific challenges, competitor you want to beat, etc." />
+            </div>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-accent btn-lg py-3 fw-bold" id="submitBtn">
+              <i class="bi bi-stars me-2"></i> Generate My Startup Blueprint
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display:none;">
+  <div class="loading-content">
+    <div class="loading-spinner-ring"></div>
+    <div class="loading-logo mb-3"><i class="bi bi-rocket-takeoff-fill"></i></div>
+    <h4 class="fw-bold mb-2" id="loadingTitle">Generating Your Blueprint...</h4>
+    <p class="text-muted mb-4" id="loadingStep">Understanding your idea...</p>
+    <div class="loading-steps-list" id="loadingSteps">
+      <div class="loading-step-item pending" id="step-0"><i class="bi bi-circle me-2"></i>Understanding your idea...</div>
+      <div class="loading-step-item pending" id="step-1"><i class="bi bi-circle me-2"></i>Searching startup knowledge...</div>
+      <div class="loading-step-item pending" id="step-2"><i class="bi bi-circle me-2"></i>Analyzing competitors...</div>
+      <div class="loading-step-item pending" id="step-3"><i class="bi bi-circle me-2"></i>Finding government schemes...</div>
+      <div class="loading-step-item pending" id="step-4"><i class="bi bi-circle me-2"></i>Estimating budget...</div>
+      <div class="loading-step-item pending" id="step-5"><i class="bi bi-circle me-2"></i>Building roadmap...</div>
+      <div class="loading-step-item pending" id="step-6"><i class="bi bi-circle me-2"></i>Preparing startup blueprint...</div>
+    </div>
+    <div class="mt-4 d-flex gap-2 justify-content-center flex-wrap">
+      <span class="badge badge-ibm"><i class="bi bi-cpu me-1"></i>IBM Granite AI</span>
+      <span class="badge badge-rag"><i class="bi bi-database me-1"></i>RAG Active</span>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const LOADING_STEPS = [
+  "Understanding your idea...",
+  "Searching startup knowledge base...",
+  "Analyzing market competitors...",
+  "Finding government schemes & grants...",
+  "Estimating budget & burn rate...",
+  "Building 7-phase roadmap...",
+  "Finalising your startup blueprint..."
+];
+
+document.getElementById("blueprintForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form));
+  if (!data.idea.trim()) { alert("Please describe your startup idea."); return; }
+
+  showLoading();
+  try {
+    const resp = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+    const result = await resp.json();
+    if (result.success) {
+      sessionStorage.setItem("blueprint", JSON.stringify(result.blueprint));
+      sessionStorage.setItem("session_id", result.session_id);
+      await completeLoading();
+      window.location.href = "/dashboard";
+    } else {
+      hideLoading();
+      showError(result.error || "Generation failed. Please try again.");
+    }
+  } catch(err) {
+    hideLoading();
+    showError("Network error: " + err.message);
+  }
+});
+
+let stepInterval, currentStep = 0;
+
+function showLoading() {
+  document.getElementById("loadingOverlay").style.display = "flex";
+  document.getElementById("submitBtn").disabled = true;
+  currentStep = 0;
+  document.querySelectorAll(".loading-step-item").forEach(el => {
+    el.className = "loading-step-item pending";
+    el.querySelector("i").className = "bi bi-circle me-2";
+  });
+  stepInterval = setInterval(advanceStep, 1800);
+}
+
+function advanceStep() {
+  if (currentStep > 0) {
+    const prev = document.getElementById("step-" + (currentStep-1));
+    if (prev) { prev.className = "loading-step-item done"; prev.querySelector("i").className = "bi bi-check-circle-fill me-2"; }
+  }
+  if (currentStep < LOADING_STEPS.length) {
+    const cur = document.getElementById("step-" + currentStep);
+    if (cur) { cur.className = "loading-step-item active"; cur.querySelector("i").className = "bi bi-arrow-right-circle-fill me-2"; }
+    document.getElementById("loadingStep").textContent = LOADING_STEPS[currentStep];
+    currentStep++;
+  }
+}
+
+async function completeLoading() {
+  clearInterval(stepInterval);
+  document.querySelectorAll(".loading-step-item").forEach(el => {
+    el.className = "loading-step-item done";
+    el.querySelector("i").className = "bi bi-check-circle-fill me-2";
+  });
+  document.getElementById("loadingTitle").textContent = "Blueprint Ready! 🚀";
+  document.getElementById("loadingStep").textContent = "Redirecting to your dashboard...";
+  await new Promise(r => setTimeout(r, 1200));
+}
+
+function hideLoading() {
+  clearInterval(stepInterval);
+  document.getElementById("loadingOverlay").style.display = "none";
+  document.getElementById("submitBtn").disabled = false;
+}
+
+function showError(msg) {
+  const alert = document.createElement("div");
+  alert.className = "alert alert-danger alert-dismissible fade show mt-3";
+  alert.innerHTML = `<i class="bi bi-exclamation-triangle me-2"></i>${msg}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+  document.getElementById("blueprintForm").prepend(alert);
+}
+</script>
+{% endblock %}

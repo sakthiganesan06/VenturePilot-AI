@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+{% block title %}Startup Blueprint Dashboard — VenturPilot AI{% endblock %}
+
+{% block extra_css %}
+<style>
+.dash-nav { position: sticky; top: 70px; z-index: 100; background: rgba(15,15,25,0.95); border-bottom: 1px solid #2d3748; overflow-x: auto; white-space: nowrap; padding: 0.5rem 0; }
+.dash-nav-btn { background: none; border: none; color: #a0aec0; padding: 0.4rem 1rem; border-radius: 6px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.dash-nav-btn:hover, .dash-nav-btn.active { background: rgba(59,130,212,0.15); color: #3b82d4; }
+.section-anchor { scroll-margin-top: 130px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="dashboardApp" class="dashboard-page mt-5 pt-3">
+
+  <!-- No Blueprint Notice -->
+  <div id="noBlueprintNotice" class="container-xl py-5 text-center" style="display:none;">
+    <i class="bi bi-exclamation-circle text-muted" style="font-size:3rem;"></i>
+    <h3 class="mt-3">No Blueprint Found</h3>
+    <p class="text-muted">Generate a startup blueprint first to view the dashboard.</p>
+    <a href="/generate" class="btn btn-accent mt-2"><i class="bi bi-stars me-2"></i>Generate Blueprint</a>
+  </div>
+
+  <!-- Dashboard Nav -->
+  <div class="dash-nav" id="dashNav" style="display:none;">
+    <div class="container-xl d-flex gap-1">
+      <button class="dash-nav-btn active" onclick="scrollToSection('sec-scores')"><i class="bi bi-speedometer2 me-1"></i>Scores</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-exec')"><i class="bi bi-file-earmark-text me-1"></i>Summary</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-bmc')"><i class="bi bi-grid me-1"></i>BMC</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-market')"><i class="bi bi-graph-up me-1"></i>Market</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-competitors')"><i class="bi bi-trophy me-1"></i>Competitors</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-swot')"><i class="bi bi-grid-3x3 me-1"></i>SWOT</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-budget')"><i class="bi bi-pie-chart me-1"></i>Budget</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-revenue')"><i class="bi bi-cash me-1"></i>Revenue</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-funding')"><i class="bi bi-currency-rupee me-1"></i>Funding</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-schemes')"><i class="bi bi-flag me-1"></i>Schemes</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-legal')"><i class="bi bi-shield-check me-1"></i>Legal</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-roadmap')"><i class="bi bi-calendar3 me-1"></i>Roadmap</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-simulation')"><i class="bi bi-activity me-1"></i>Simulation</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-risks')"><i class="bi bi-exclamation-triangle me-1"></i>Risks</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-investor')"><i class="bi bi-briefcase me-1"></i>Investor</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-names')"><i class="bi bi-stars me-1"></i>Names</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-pitch')"><i class="bi bi-megaphone me-1"></i>Pitch</button>
+      <button class="dash-nav-btn" onclick="scrollToSection('sec-recs')"><i class="bi bi-lightbulb me-1"></i>Recs</button>
+    </div>
+  </div>
+
+  <div id="dashboardContent" class="container-xl py-4" style="display:none;">
+
+    <!-- Export toolbar -->
+    <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-4" data-aos="fade-down">
+      <div>
+        <h5 class="fw-bold mb-0" id="dashTitle">Startup Blueprint Dashboard</h5>
+        <small class="text-muted" id="dashMeta">Powered by IBM Granite AI + RAG</small>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-outline-light btn-sm" onclick="exportPDF()"><i class="bi bi-file-earmark-pdf me-1"></i>Blueprint PDF</button>
+        <button class="btn btn-outline-light btn-sm" onclick="exportPitchPDF()"><i class="bi bi-file-earmark-slides me-1"></i>Pitch Deck PDF</button>
+        <button class="btn btn-outline-light btn-sm" onclick="exportJSON()"><i class="bi bi-download me-1"></i>JSON</button>
+        <a href="/generate" class="btn btn-accent btn-sm"><i class="bi bi-arrow-repeat me-1"></i>Regenerate</a>
+      </div>
+    </div>
+
+    <!-- ═══ SECTION 1: STARTUP READINESS SCORES ═══ -->
+    <section class="section-anchor mb-5" id="sec-scores" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-speedometer2 me-2 text-accent"></i>Startup Readiness Dashboard</h2>
+        <button class="btn-why" onclick="toggleWhy('why-scores')">💡 Why?</button>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="glass-card text-center p-4">
+            <h6 class="text-muted mb-3">Overall Startup Score</h6>
+            <canvas id="gaugeOverall" width="180" height="180" class="mx-auto d-block"></canvas>
+            <div class="score-label mt-2" id="scoreOverallLabel">—</div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="glass-card p-4 h-100">
+            <h6 class="text-muted mb-4">Dimension Scores</h6>
+            <div id="scoresBars"></div>
+          </div>
+        </div>
+      </div>
+      <div class="why-panel mt-3" id="why-scores" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 2: EXECUTIVE SUMMARY ═══ -->
+    <section class="section-anchor mb-5" id="sec-exec" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-file-earmark-text me-2 text-accent"></i>Executive Summary</h2>
+        <button class="btn-why" onclick="toggleWhy('why-exec')">💡 Why?</button>
+      </div>
+      <div class="row g-4" id="execCards"></div>
+      <div class="why-panel mt-3" id="why-exec" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 3: BUSINESS MODEL CANVAS ═══ -->
+    <section class="section-anchor mb-5" id="sec-bmc" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-grid me-2 text-accent"></i>Business Model Canvas</h2>
+        <button class="btn-why" onclick="toggleWhy('why-bmc')">💡 Why?</button>
+      </div>
+      <div class="bmc-grid" id="bmcGrid"></div>
+      <div class="why-panel mt-3" id="why-bmc" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 4: MARKET ANALYSIS ═══ -->
+    <section class="section-anchor mb-5" id="sec-market" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-graph-up me-2 text-accent"></i>Market Analysis</h2>
+        <button class="btn-why" onclick="toggleWhy('why-market')">💡 Why?</button>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-5"><div class="glass-card p-4"><canvas id="chartTAMSAMSOM" height="250"></canvas></div></div>
+        <div class="col-lg-7">
+          <div class="row g-3" id="marketMetricCards"></div>
+          <div class="glass-card p-4 mt-3">
+            <h6 class="fw-semibold mb-3"><i class="bi bi-trend me-2"></i>Industry Trends</h6>
+            <div id="marketTrends"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4"><h6 class="fw-semibold mb-3"><i class="bi bi-person-badge me-2"></i>Customer Personas</h6><div class="row g-3" id="personaCards"></div></div>
+      <div class="why-panel mt-3" id="why-market" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 5: COMPETITOR ANALYSIS ═══ -->
+    <section class="section-anchor mb-5" id="sec-competitors" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-trophy me-2 text-accent"></i>Competitor Analysis</h2>
+        <button class="btn-why" onclick="toggleWhy('why-comp')">💡 Why?</button>
+      </div>
+      <div class="row g-4 mb-4" id="competitorCards"></div>
+      <div class="glass-card p-4"><canvas id="chartCompetitors" height="160"></canvas></div>
+      <div class="row g-3 mt-3">
+        <div class="col-md-6"><div class="glass-card p-4 border-accent"><h6 class="text-accent fw-bold mb-2"><i class="bi bi-shield-fill-check me-2"></i>Competitive Advantage</h6><p id="compAdvantage" class="mb-0"></p></div></div>
+        <div class="col-md-6"><div class="glass-card p-4 border-purple"><h6 class="text-purple fw-bold mb-2"><i class="bi bi-binoculars-fill me-2"></i>Market Gap</h6><p id="marketGap" class="mb-0"></p></div></div>
+      </div>
+      <div class="why-panel mt-3" id="why-comp" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 6: SWOT ═══ -->
+    <section class="section-anchor mb-5" id="sec-swot" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-grid-3x3 me-2 text-accent"></i>SWOT Analysis</h2>
+        <button class="btn-why" onclick="toggleWhy('why-swot')">💡 Why?</button>
+      </div>
+      <div class="row g-4" id="swotCards"></div>
+      <div class="why-panel mt-3" id="why-swot" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 7: BUDGET ═══ -->
+    <section class="section-anchor mb-5" id="sec-budget" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-pie-chart-fill me-2 text-accent"></i>Budget Estimator</h2>
+        <button class="btn-why" onclick="toggleWhy('why-budget')">💡 Why?</button>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-5"><div class="glass-card p-4"><canvas id="chartBudgetPie" height="260"></canvas></div></div>
+        <div class="col-lg-7">
+          <div class="glass-card p-4 h-100"><canvas id="chartBudgetBar" height="260"></canvas></div>
+        </div>
+      </div>
+      <div class="row g-3 mt-3" id="budgetCards"></div>
+      <div class="why-panel mt-3" id="why-budget" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 8: REVENUE MODEL ═══ -->
+    <section class="section-anchor mb-5" id="sec-revenue" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-cash-stack me-2 text-accent"></i>Revenue Model Advisor</h2>
+        <button class="btn-why" onclick="toggleWhy('why-revenue')">💡 Why?</button>
+      </div>
+      <div class="row g-4" id="revenueCards"></div>
+      <div class="why-panel mt-3" id="why-revenue" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 9: FUNDING ═══ -->
+    <section class="section-anchor mb-5" id="sec-funding" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-currency-rupee me-2 text-accent"></i>Funding Recommendations</h2>
+        <button class="btn-why" onclick="toggleWhy('why-funding')">💡 Why?</button>
+      </div>
+      <div class="row g-4" id="fundingCards"></div>
+      <div class="why-panel mt-3" id="why-funding" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 10: GOVERNMENT SCHEMES ═══ -->
+    <section class="section-anchor mb-5" id="sec-schemes" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-flag-fill me-2 text-accent"></i>Government Scheme Explorer</h2>
+        <button class="btn-why" onclick="toggleWhy('why-schemes')">💡 Why?</button>
+      </div>
+      <div class="row g-4" id="schemeCards"></div>
+      <div class="why-panel mt-3" id="why-schemes" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 11: LEGAL CHECKLIST ═══ -->
+    <section class="section-anchor mb-5" id="sec-legal" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-shield-check me-2 text-accent"></i>Legal Compliance Checklist</h2>
+        <button class="btn-why" onclick="toggleWhy('why-legal')">💡 Why?</button>
+      </div>
+      <div class="glass-card p-4"><div id="legalChecklist"></div></div>
+      <div class="why-panel mt-3" id="why-legal" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 12: ROADMAP ═══ -->
+    <section class="section-anchor mb-5" id="sec-roadmap" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-calendar2-range-fill me-2 text-accent"></i>Startup Roadmap</h2>
+        <button class="btn-why" onclick="toggleWhy('why-roadmap')">💡 Why?</button>
+      </div>
+      <div class="roadmap-timeline" id="roadmapTimeline"></div>
+      <div class="why-panel mt-3" id="why-roadmap" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 13: SIMULATION ═══ -->
+    <section class="section-anchor mb-5" id="sec-simulation" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-activity me-2 text-accent"></i>Startup Growth Simulation</h2>
+        <button class="btn btn-accent btn-sm" id="simulateBtn" onclick="runSimulation()"><i class="bi bi-play-fill me-1"></i>🚀 Simulate Startup Growth</button>
+      </div>
+      <div id="simulationDash" style="display:none;">
+        <div class="row g-3 mb-4" id="simKPIs"></div>
+        <div class="row g-4">
+          <div class="col-lg-6"><div class="glass-card p-4"><canvas id="chartRevenueExpense" height="220"></canvas></div></div>
+          <div class="col-lg-6"><div class="glass-card p-4"><canvas id="chartCustomers" height="220"></canvas></div></div>
+        </div>
+        <div class="glass-card p-4 mt-4"><h6 class="fw-semibold mb-2"><i class="bi bi-info-circle me-2"></i>Model Assumptions</h6><p id="simAssumptions" class="text-muted mb-0 small"></p></div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 14: RISK ANALYSIS ═══ -->
+    <section class="section-anchor mb-5" id="sec-risks" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-exclamation-triangle me-2 text-accent"></i>Risk Analysis</h2>
+        <button class="btn-why" onclick="toggleWhy('why-risks')">💡 Why?</button>
+      </div>
+      <div class="row g-4" id="riskCards"></div>
+      <div class="glass-card p-4 mt-4"><canvas id="chartRisks" height="160"></canvas></div>
+      <div class="why-panel mt-3" id="why-risks" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 15: INVESTOR READINESS ═══ -->
+    <section class="section-anchor mb-5" id="sec-investor" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-briefcase me-2 text-accent"></i>Investor Readiness</h2>
+        <button class="btn-why" onclick="toggleWhy('why-investor')">💡 Why?</button>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-4"><div class="glass-card p-4 text-center"><h6 class="text-muted">Investor Readiness Score</h6><canvas id="gaugeInvestor" width="180" height="180" class="mx-auto d-block mt-2"></canvas><div class="score-label mt-2" id="investorScoreLabel">—</div></div></div>
+        <div class="col-lg-8"><div class="glass-card p-4 h-100" id="investorDetails"></div></div>
+      </div>
+      <div class="why-panel mt-3" id="why-investor" style="display:none;"></div>
+    </section>
+
+    <!-- ═══ SECTION 16: STARTUP IMPROVER ═══ -->
+    <section class="section-anchor mb-5" id="sec-improve" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-magic me-2 text-accent"></i>Startup Idea Improver</h2>
+        <button class="btn btn-accent btn-sm" onclick="loadImprovements()"><i class="bi bi-stars me-1"></i>✨ Improve My Startup</button>
+      </div>
+      <div class="row g-4" id="improvementCards"></div>
+    </section>
+
+    <!-- ═══ SECTION 17: NAME GENERATOR ═══ -->
+    <section class="section-anchor mb-5" id="sec-names" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-stars me-2 text-accent"></i>AI Startup Name Generator</h2>
+        <button class="btn btn-outline-accent btn-sm" onclick="regenerateNames()"><i class="bi bi-arrow-repeat me-1"></i>Regenerate Names</button>
+      </div>
+      <div class="row g-3 mb-4" id="nameCards"></div>
+      <div class="row g-3">
+        <div class="col-md-6"><div class="glass-card p-4"><h6 class="fw-semibold mb-3"><i class="bi bi-chat-quote me-2"></i>Brand Taglines</h6><div id="taglineList"></div></div></div>
+        <div class="col-md-6"><div class="glass-card p-4"><h6 class="fw-semibold mb-3"><i class="bi bi-globe me-2"></i>Domain Suggestions</h6><div id="domainList"></div></div></div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 18: ELEVATOR PITCH ═══ -->
+    <section class="section-anchor mb-5" id="sec-pitch" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-megaphone-fill me-2 text-accent"></i>Elevator Pitch Generator</h2>
+      </div>
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="glass-card p-4 h-100 border-accent">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0"><i class="bi bi-stopwatch me-2"></i>30-Second Pitch</h6>
+              <button class="btn btn-ghost btn-sm" onclick="copyText('pitch30sec')"><i class="bi bi-clipboard"></i></button>
+            </div>
+            <p id="pitch30sec" class="text-muted small mb-0 lh-lg"></p>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="glass-card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0"><i class="bi bi-stopwatch-fill me-2"></i>2-Minute Pitch</h6>
+              <button class="btn btn-ghost btn-sm" onclick="copyText('pitch2min')"><i class="bi bi-clipboard"></i></button>
+            </div>
+            <p id="pitch2min" class="text-muted small mb-0 lh-lg"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SECTION 19: PITCH DECK PREVIEW ═══ -->
+    <section class="section-anchor mb-5" id="sec-deck" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-file-earmark-slides me-2 text-accent"></i>Pitch Deck Generator</h2>
+        <button class="btn btn-accent btn-sm" onclick="exportPitchPDF()"><i class="bi bi-download me-1"></i>Export PDF</button>
+      </div>
+      <div class="pitch-deck-grid" id="pitchDeckPreview"></div>
+    </section>
+
+    <!-- ═══ SECTION 20: RECOMMENDATIONS ═══ -->
+    <section class="section-anchor mb-5" id="sec-recs" data-aos="fade-up">
+      <div class="section-header mb-4">
+        <h2 class="section-heading"><i class="bi bi-lightbulb-fill me-2 text-accent"></i>AI Recommendation Center</h2>
+        <button class="btn-why" onclick="toggleWhy('why-recs')">💡 Why?</button>
+      </div>
+      <div class="row g-4" id="recCards"></div>
+      <div class="why-panel mt-3" id="why-recs" style="display:none;"></div>
+    </section>
+
+  </div><!-- /dashboardContent -->
+</div><!-- /dashboardApp -->
+
+<!-- Scheme Modal -->
+<div class="modal fade" id="schemeModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark-2 border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fw-bold" id="schemeModalTitle"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="schemeModalBody"></div>
+      <div class="modal-footer border-secondary"><button type="button" class="btn btn-accent" data-bs-dismiss="modal">Close</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- BMC Modal -->
+<div class="modal fade" id="bmcModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark-2 border-secondary">
+      <div class="modal-header border-secondary">
+        <h5 class="modal-title fw-bold" id="bmcModalTitle"></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="bmcModalBody"></div>
+      <div class="modal-footer border-secondary"><button type="button" class="btn btn-accent" data-bs-dismiss="modal">Close</button></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

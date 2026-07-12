@@ -1,0 +1,28 @@
+# ── Core Flask ─────────────────────────────────────────────────────────────
+Flask>=3.0.0
+flask-cors>=4.0.0
+python-dotenv>=1.0.0
+Werkzeug>=3.0.0
+
+# ── IBM watsonx.ai (Granite) ───────────────────────────────────────────────
+ibm-watsonx-ai>=1.1.2
+
+# ── IBM Cloud Object Storage ───────────────────────────────────────────────
+ibm-cos-sdk>=2.13.0
+ibm-cos-sdk-core>=2.13.0
+ibm-cos-sdk-s3transfer>=2.13.0
+
+# ── RAG Pipeline ───────────────────────────────────────────────────────────
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-text-splitters>=0.3.0
+faiss-cpu>=1.7.4
+sentence-transformers>=3.0.0
+huggingface-hub>=0.24.0
+
+# ── PDF Generation ─────────────────────────────────────────────────────────
+reportlab>=4.0.0
+
+# ── Utilities ──────────────────────────────────────────────────────────────
+requests>=2.31.0
+numpy>=1.24.0

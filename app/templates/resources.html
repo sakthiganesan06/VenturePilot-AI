@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}Resource Hub — VenturPilot AI{% endblock %}
+
+{% block content %}
+<div class="resources-page pt-5 mt-3">
+  <div class="hero-glow hero-glow-1" style="top:10%;left:5%;"></div>
+  <div class="container-xl py-5 position-relative z-1">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <span class="badge badge-cloud mb-3"><i class="bi bi-cloud me-1"></i>IBM Cloud Object Storage</span>
+      <h1 class="section-title">Startup <span class="gradient-text">Resource Hub</span></h1>
+      <p class="text-muted mt-2">Download templates, guides, legal documents, and tools — sourced from IBM Cloud Object Storage.</p>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="d-flex gap-2 flex-wrap mb-4 justify-content-center" data-aos="fade-up">
+      <button class="btn btn-outline-light btn-sm filter-btn active" data-filter="ALL">All Resources</button>
+      <button class="btn btn-outline-light btn-sm filter-btn" data-filter="PDF">PDF Guides</button>
+      <button class="btn btn-outline-light btn-sm filter-btn" data-filter="DOCX">Word Templates</button>
+      <button class="btn btn-outline-light btn-sm filter-btn" data-filter="XLSX">Excel Models</button>
+      <button class="btn btn-outline-light btn-sm filter-btn" data-filter="PPTX">Presentations</button>
+    </div>
+
+    <!-- Loading skeleton -->
+    <div id="resourcesLoading" class="row g-4">
+      {% for i in range(6) %}
+      <div class="col-md-6 col-lg-4">
+        <div class="glass-card p-4 skeleton-card">
+          <div class="skeleton-line w-75 mb-3"></div>
+          <div class="skeleton-line w-50 mb-2"></div>
+          <div class="skeleton-line w-40"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Actual resources -->
+    <div class="row g-4" id="resourcesGrid" style="display:none;"></div>
+
+    <!-- COS info banner -->
+    <div class="glass-card p-4 mt-5 border-accent" data-aos="fade-up">
+      <div class="d-flex align-items-start gap-3">
+        <i class="bi bi-cloud-upload-fill text-accent fs-3 mt-1"></i>
+        <div>
+          <h6 class="fw-bold mb-1">Powered by IBM Cloud Object Storage</h6>
+          <p class="text-muted small mb-0">All resources are stored securely in IBM COS. Generated blueprints, pitch decks, and exported PDFs are also automatically saved to your COS bucket for permanent access and team sharing.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const typeIconMap = {
+  "PDF": "bi-file-earmark-pdf text-danger",
+  "DOCX": "bi-file-earmark-word text-primary",
+  "XLSX": "bi-file-earmark-spreadsheet text-success",
+  "PPTX": "bi-file-earmark-slides text-warning",
+  "FILE": "bi-file-earmark"
+};
+const typeBadgeMap = {
+  "PDF": "bg-danger", "DOCX": "bg-primary", "XLSX": "bg-success", "PPTX": "bg-warning text-dark", "FILE": "bg-secondary"
+};
+
+let allResources = [];
+
+async function loadResources() {
+  try {
+    const resp = await fetch("/api/resources/list");
+    const data = await resp.json();
+    allResources = data.resources || [];
+    renderResources(allResources);
+    document.getElementById("resourcesLoading").style.display = "none";
+    document.getElementById("resourcesGrid").style.display = "";
+  } catch(e) {
+    document.getElementById("resourcesLoading").innerHTML = `<div class="col-12 text-center text-muted py-5"><i class="bi bi-cloud-slash fs-1 d-block mb-3"></i>Unable to load resources. Check IBM COS configuration.</div>`;
+  }
+}
+
+function renderResources(resources) {
+  const grid = document.getElementById("resourcesGrid");
+  grid.innerHTML = resources.map(r => `
+    <div class="col-md-6 col-lg-4 resource-item" data-type="${r.type}" data-aos="fade-up">
+      <div class="glass-card p-4 h-100 resource-card">
+        <div class="d-flex align-items-start gap-3">
+          <i class="bi ${typeIconMap[r.type] || 'bi-file-earmark'} fs-2 mt-1"></i>
+          <div class="flex-grow-1 min-w-0">
+            <h6 class="fw-semibold mb-1 text-truncate" title="${r.name}">${r.name}</h6>
+            <div class="d-flex gap-2 align-items-center flex-wrap mb-3">
+              <span class="badge ${typeBadgeMap[r.type] || 'bg-secondary'} badge-sm">${r.type}</span>
+              <span class="text-muted small">${r.size_kb} KB</span>
+              <span class="text-muted small">${r.modified}</span>
+            </div>
+            <div class="d-flex gap-2">
+              <a href="${r.url}" class="btn btn-outline-accent btn-sm flex-grow-1" ${r.url === '#' ? 'disabled' : 'download'}>
+                <i class="bi bi-download me-1"></i>Download
+              </a>
+              <button class="btn btn-ghost btn-sm" onclick="copyResourceLink('${r.url}')"><i class="bi bi-link-45deg"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join("");
+  AOS.refresh();
+}
+
+// Filter
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const filter = btn.dataset.filter;
+    const filtered = filter === "ALL" ? allResources : allResources.filter(r => r.type === filter);
+    renderResources(filtered);
+  });
+});
+
+function copyResourceLink(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    showToast("Link copied!");
+  });
+}
+
+function showToast(msg) {
+  const toast = document.createElement("div");
+  toast.className = "position-fixed bottom-0 end-0 m-4 p-3 bg-dark border border-accent rounded text-white small";
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2500);
+}
+
+loadResources();
+</script>
+{% endblock %}

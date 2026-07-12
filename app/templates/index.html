@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% block title %}VenturPilot AI — Turn Ideas Into Ventures, Instantly{% endblock %}
+
+{% block content %}
+
+<!-- ─── HERO ──────────────────────────────────────────────────────────── -->
+<section class="hero-section d-flex align-items-center" id="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-glow hero-glow-1"></div>
+  <div class="hero-glow hero-glow-2"></div>
+  <div class="container-xl position-relative z-1">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <span class="badge rounded-pill hero-tagline-badge px-4 py-2.5 fw-bold">
+            🚀 From Idea to Investment — Powered by AI
+          </span>
+        </div>
+        <div class="d-flex gap-2 flex-wrap mb-4">
+          <span class="badge badge-ibm"><i class="bi bi-cpu me-1"></i>IBM Granite AI</span>
+          <span class="badge badge-rag"><i class="bi bi-database me-1"></i>RAG Pipeline</span>
+          <span class="badge badge-cloud"><i class="bi bi-cloud me-1"></i>IBM Cloud</span>
+        </div>
+        <h1 class="hero-headline">
+          Turn Your Startup <br/>
+          <span class="gradient-text">Idea Into a Blueprint</span><br/>
+          In 60 Seconds.
+        </h1>
+        <p class="hero-sub mt-3 mb-4 text-muted">
+          India's first AI-powered startup co-pilot. Get a complete investor-ready business blueprint —
+          market analysis, roadmap, funding recommendations, pitch deck — all powered by
+          <strong>IBM Granite AI + RAG</strong>.
+        </p>
+        <div class="d-flex flex-wrap gap-3 mb-5">
+          <a href="/generate" class="btn btn-accent btn-lg px-5 shadow-lg">
+            <i class="bi bi-stars me-2"></i> Generate My Blueprint
+          </a>
+          <a href="#features" class="btn btn-outline-light btn-lg px-4">
+            <i class="bi bi-play-circle me-2"></i> See How It Works
+          </a>
+        </div>
+        <div class="hero-stats d-flex flex-wrap gap-4">
+          <div class="stat-item"><span class="stat-num counter" data-target="23">0</span><span class="stat-plus">+</span><div class="stat-label">Dashboard Sections</div></div>
+          <div class="stat-item"><span class="stat-num counter" data-target="10">0</span><span class="stat-plus">+</span><div class="stat-label">Govt. Schemes</div></div>
+          <div class="stat-item"><span class="stat-num counter" data-target="60">0</span><span class="stat-plus">s</span><div class="stat-label">Time to Blueprint</div></div>
+        </div>
+      </div>
+      <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+        <div class="hero-visual">
+          <div class="blueprint-card-preview glass-card">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div>
+              <span class="text-muted small ms-auto">blueprint_ai.json</span>
+            </div>
+            <div class="preview-lines">
+              <div class="preview-line" style="--w:85%"><span class="token-key">"startup"</span><span class="token-colon">:</span> <span class="token-str">"HealthTech AI Platform"</span></div>
+              <div class="preview-line" style="--w:70%"><span class="token-key">"overall_score"</span><span class="token-colon">:</span> <span class="token-num">84</span></div>
+              <div class="preview-line" style="--w:90%"><span class="token-key">"market_size"</span><span class="token-colon">:</span> <span class="token-str">"₹12,400 Crore"</span></div>
+              <div class="preview-line" style="--w:75%"><span class="token-key">"recommended_model"</span><span class="token-colon">:</span> <span class="token-str">"SaaS"</span></div>
+              <div class="preview-line" style="--w:60%"><span class="token-key">"funding_stage"</span><span class="token-colon">:</span> <span class="token-str">"Seed Round"</span></div>
+              <div class="preview-line blink" style="--w:45%"><span class="token-key">"pitch_score"</span><span class="token-colon">:</span> <span class="token-num">79</span></div>
+            </div>
+            <!-- Mini score gauges -->
+            <div class="d-flex gap-3 mt-4 flex-wrap">
+              <div class="mini-gauge" data-val="84" data-label="Overall"></div>
+              <div class="mini-gauge" data-val="90" data-label="Innovation"></div>
+              <div class="mini-gauge" data-val="78" data-label="Market"></div>
+              <div class="mini-gauge" data-val="72" data-label="Feasibility"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ────────────────────────────────────────────────────── -->
+<section class="section-pad bg-dark-2" id="how">
+  <div class="container-xl">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <span class="section-tag">How It Works</span>
+      <h2 class="section-title mt-2">From Idea to Investor-Ready in <span class="gradient-text">4 Steps</span></h2>
+    </div>
+    <div class="row gy-4 justify-content-center">
+      {% for step in [
+        ("1", "bi-pencil-square", "Submit Your Idea", "Enter your startup concept, industry, stage, budget, and goals into our intelligent form.", "accent"),
+        ("2", "bi-database-check", "RAG Retrieval", "Our RAG pipeline searches the IBM Cloud knowledge base — startup schemes, market data, legal docs, funding patterns.", "purple"),
+        ("3", "bi-cpu-fill", "IBM Granite Generates", "IBM Granite AI processes your idea + RAG context to generate a structured, comprehensive startup blueprint JSON.", "accent"),
+        ("4", "bi-grid-3x3-gap-fill", "Interactive Dashboard", "Your blueprint is rendered as a fully interactive visual dashboard with charts, timelines, AI explanations, and export tools.", "purple")
+      ] %}
+      <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+        <div class="step-card glass-card h-100">
+          <div class="step-num text-{{ step[4] }}">{{ step[0] }}</div>
+          <div class="step-icon mb-3"><i class="bi {{ step[1] }}"></i></div>
+          <h5 class="fw-bold">{{ step[2] }}</h5>
+          <p class="text-muted small mb-0">{{ step[3] }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ────────────────────────────────────────────────────────── -->
+<section class="section-pad" id="features">
+  <div class="container-xl">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <span class="section-tag">Features</span>
+      <h2 class="section-title mt-2">Everything a Startup <span class="gradient-text">Needs to Launch</span></h2>
+      <p class="text-muted mt-2">23 interactive dashboard sections. Every insight visualized.</p>
+    </div>
+    <div class="row gy-4">
+      {% set features = [
+        ("bi-graph-up-arrow", "Startup Readiness Score", "6-dimension scoring with animated gauges, progress bars, and AI scoring rationale.", "accent"),
+        ("bi-building", "Business Model Canvas", "All 9 BMC sections with clickable cards and AI reasoning for each component.", "purple"),
+        ("bi-pie-chart-fill", "Market Analysis", "TAM/SAM/SOM charts, customer personas, and industry trend analysis.", "accent"),
+        ("bi-trophy-fill", "Competitor Analysis", "Side-by-side competitor comparison, market gap identification, and competitive moat.", "purple"),
+        ("bi-currency-rupee", "Budget Estimator", "AI-powered budget breakdown with pie/bar charts and ₹-based Indian context.", "accent"),
+        ("bi-cash-stack", "Funding Recommendations", "Personalized funding roadmap — Bootstrap → Angel → VC → Grants with eligibility details.", "purple"),
+        ("bi-flag-fill", "Government Schemes", "RAG-powered scheme recommendations — Startup India, MSME, DPIIT, TIDE 2.0, AIM, SIDBI.", "accent"),
+        ("bi-shield-check", "Legal Compliance", "Interactive legal checklist with cost estimates, timelines, and AI guidance.", "purple"),
+        ("bi-calendar2-range-fill", "Startup Roadmap", "Animated 7-phase visual timeline from Idea → Research → MVP → Launch → Scale.", "accent"),
+        ("bi-activity", "Growth Simulation", "12-month financial simulation — revenue, expenses, burn rate, runway charts.", "purple"),
+        ("bi-chat-dots-fill", "AI Mentor Chat", "Floating AI mentor understands your blueprint and answers follow-up questions using RAG.", "accent"),
+        ("bi-file-earmark-slides-fill", "Pitch Deck Generator", "10-slide investor presentation auto-generated with PDF export.", "purple")
+      ] %}
+      {% for icon, title, desc, color in features %}
+      <div class="col-md-6 col-xl-4" data-aos="fade-up" data-aos-delay="{{ loop.index % 3 * 100 }}">
+        <div class="feature-card glass-card h-100">
+          <div class="feature-icon text-{{ color }}"><i class="bi {{ icon }}"></i></div>
+          <h5 class="fw-semibold mt-3 mb-2">{{ title }}</h5>
+          <p class="text-muted small mb-0">{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ─── IBM TECH STACK ──────────────────────────────────────────────────── -->
+<section class="section-pad bg-dark-2">
+  <div class="container-xl">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <span class="section-tag">Powered By</span>
+      <h2 class="section-title mt-2">Enterprise-Grade <span class="gradient-text">IBM Technology Stack</span></h2>
+    </div>
+    <div class="row gy-4 justify-content-center">
+      {% for icon, name, desc in [
+        ("bi-cpu-fill","IBM Granite AI","Foundation model for structured startup blueprint generation with enterprise-grade reliability."),
+        ("bi-cloud-fill","IBM Cloud Object Storage","Stores knowledge base, blueprints, PDFs, resources, and generated reports at scale."),
+        ("bi-database-fill","RAG Pipeline","LangChain + FAISS vector search retrieves startup knowledge, policy docs, and funding data."),
+        ("bi-box-fill","IBM Code Engine","Serverless deployment — auto-scales with zero infrastructure management required.")
+      ] %}
+      <div class="col-md-6 col-lg-3" data-aos="zoom-in" data-aos-delay="{{ loop.index * 80 }}">
+        <div class="tech-card glass-card text-center h-100">
+          <div class="tech-icon mb-3"><i class="bi {{ icon }}"></i></div>
+          <h5 class="fw-bold">{{ name }}</h5>
+          <p class="text-muted small mb-0">{{ desc }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─────────────────────────────────────────────────────────────── -->
+<section class="section-pad cta-section">
+  <div class="container-xl text-center" data-aos="zoom-in">
+    <h2 class="section-title mb-3">Ready to Build Your <span class="gradient-text">Startup Blueprint?</span></h2>
+    <p class="text-muted mb-4 lead">Join thousands of founders using IBM Granite AI to validate and launch their ideas.</p>
+    <a href="/generate" class="btn btn-accent btn-lg px-6 shadow-lg">
+      <i class="bi bi-stars me-2"></i> Generate My Free Blueprint
+    </a>
+    <p class="text-muted small mt-3">No signup required. Powered by IBM watsonx.ai.</p>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Animated counters
+  document.querySelectorAll(".counter").forEach(el => {
+    const target = parseInt(el.dataset.target);
+    let count = 0;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+      count = Math.min(count + step, target);
+      el.textContent = count;
+      if (count >= target) clearInterval(timer);
+    }, 40);
+  });
+
+  // Mini canvas gauges
+  document.querySelectorAll(".mini-gauge").forEach(el => {
+    const val = parseInt(el.dataset.val);
+    const label = el.dataset.label;
+    const canvas = document.createElement("canvas");
+    canvas.width = 70; canvas.height = 70;
+    el.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    const lbl = document.createElement("div");
+    lbl.className = "mini-gauge-label";
+    lbl.textContent = label;
+    el.appendChild(lbl);
+    drawGauge(ctx, val, 35, 35, 28, "#3b82d4");
+  });
+
+  function drawGauge(ctx, val, cx, cy, r, color) {
+    const start = -Math.PI * 0.8;
+    const end = start + (Math.PI * 1.6) * (val / 100);
+    ctx.clearRect(0, 0, 70, 70);
+    ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI * 0.8, Math.PI * 0.8);
+    ctx.strokeStyle = "#2d3748"; ctx.lineWidth = 7; ctx.lineCap = "round"; ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, r, start, end);
+    ctx.strokeStyle = color; ctx.lineWidth = 7; ctx.lineCap = "round"; ctx.stroke();
+    ctx.fillStyle = "#e2e8f0"; ctx.font = "bold 13px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(val, cx, cy);
+  }
+});
+</script>
+{% endblock %}
