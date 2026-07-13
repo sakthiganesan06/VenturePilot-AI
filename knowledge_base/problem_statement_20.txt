@@ -1,0 +1,11 @@
+Problem Statement No.20 – Startup Blueprint Generator Agent 
+
+The Challenge – A Startup Blueprint Generator Agent, powered by RAG (Retrieval Augmented Generation), transforms raw startup ideas into complete, actionable business blueprints. It retrieves relevant data on market research, funding options, competitor analysis, revenue models, government schemes, and legal requirements from startup portals, incubator databases, and policy documents.
+
+Users can describe their idea in simple terms, and the agent provides a structured plan including business model canvas, estimated budget, go-to-market strategy, and potential investor connections.
+
+The agent eliminates ambiguity and accelerates the journey from idea to implementation.
+
+This AI-driven assistant empowers aspiring entrepreneurs with clarity, resources, and direction to launch their ventures successfully.
+
+Technology – Use of IBM Cloud Lite services / IBM Granite is mandatory.
