@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 export_bp = Blueprint("export", __name__)
 
 EXPORTS_DIR = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "exports"
+    os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "exports"
 )
 
 

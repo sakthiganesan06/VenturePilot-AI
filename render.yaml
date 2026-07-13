@@ -1,0 +1,52 @@
+# Render Blueprint Specification
+# See https://render.com/docs/yaml-spec for details
+services:
+  - type: web
+    name: startup-blueprint-generator
+    env: docker
+    plan: free
+    # Note: If deploying using a free instance, model loading / RAG download might take
+    # slightly longer on first request.
+    
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    
+    # Expose port (must match Dockerfile and Gunicorn bind port)
+    port: 5000
+
+    envVars:
+      # IBM watsonx.ai Credentials (User must provide these in Render dashboard)
+      - key: IBM_WATSONX_API_KEY
+        sync: false
+        placeholder: "Your IBM watsonx.ai API Key"
+      - key: IBM_WATSONX_PROJECT_ID
+        sync: false
+        placeholder: "Your IBM watsonx.ai Project ID"
+      - key: IBM_WATSONX_URL
+        value: https://us-south.ml.cloud.ibm.com
+      - key: GRANITE_MODEL_ID
+        value: ibm/granite-3-3-8b-instruct
+
+      # IBM Cloud Object Storage Credentials (User must provide these)
+      - key: IBM_COS_API_KEY
+        sync: false
+        placeholder: "Your IBM COS API Key"
+      - key: IBM_COS_INSTANCE_CRN
+        sync: false
+        placeholder: "Your IBM COS Instance CRN"
+      - key: IBM_COS_ENDPOINT
+        value: https://s3.us-south.cloud-object-storage.appdomain.cloud
+
+      # IBM COS Buckets
+      - key: IBM_COS_BUCKET_KB
+        value: startup-knowledge-base
+      - key: IBM_COS_BUCKET_REPORTS
+        value: startup-reports
+      - key: IBM_COS_BUCKET_RESOURCES
+        value: startup-resources
+
+      # Flask application configuration
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_DEBUG
+        value: "false"
