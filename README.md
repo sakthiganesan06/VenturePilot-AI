@@ -2,6 +2,8 @@
 
 > **India's first AI-powered startup co-pilot** — Turn any startup idea into a complete, investor-ready business blueprint in under 60 seconds using **IBM Granite AI + RAG + IBM Cloud**.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render.svg)](https://render.com/deploy?repo=https://github.com/sakthiganesan06/VenturePilot-AI)
+
 ---
 
 ## ✨ Features
@@ -122,6 +124,10 @@ startup_blueprint/
 ├── run.py                          # Flask entry point
 ├── requirements.txt
 ├── .env.example
+├── render.yaml                     # Render Infrastructure-as-code spec
+├── app.json                        # Deployment metadata
+├── RENDER_DEPLOYMENT.md            # Render deployment guide
+├── DEPLOYMENT.md                   # IBM Cloud deployment guide
 ├── knowledge_base/                 # Local RAG knowledge base docs
 ├── exports/                        # Generated PDFs and JSON reports
 └── app/
@@ -185,7 +191,9 @@ startup_blueprint/
 
 ## 🚢 Deployment
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for IBM Cloud Code Engine deployment guide.
+The application can be deployed to the following cloud platforms:
+- **Render**: See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for Render Docker deployment guide.
+- **IBM Cloud Code Engine**: See [DEPLOYMENT.md](DEPLOYMENT.md) for IBM Cloud deployment guide.
 
 ---
 
