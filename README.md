@@ -2,7 +2,7 @@
 
 > **India's first AI-powered startup co-pilot** — Turn any startup idea into a complete, investor-ready business blueprint in under 60 seconds using **IBM Granite AI + RAG + IBM Cloud**.
 
-[![Deploy to Render](https://render.com/images/deploy-to-render.svg)](https://render.com/deploy?repo=https://github.com/sakthiganesan06/VenturePilot-AI)
+[![Deployed Link](https://venturepilot-ai-jtqc.onrender.com)
 
 ---
 
