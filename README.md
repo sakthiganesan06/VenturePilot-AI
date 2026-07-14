@@ -189,14 +189,6 @@ startup_blueprint/
 
 ---
 
-## 🚢 Deployment
-
-The application can be deployed to the following cloud platforms:
-- **Render**: See [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md) for Render Docker deployment guide.
-- **IBM Cloud Code Engine**: See [DEPLOYMENT.md](DEPLOYMENT.md) for IBM Cloud deployment guide.
-
----
-
 ## ⚠️ Disclaimer
 
 This application generates AI-powered insights using IBM Granite. All recommendations should be validated by domain experts — legal, financial, and business advisors — before making investment or business decisions.
