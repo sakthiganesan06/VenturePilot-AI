@@ -4,8 +4,6 @@
 
 🔗 **Live Deployed App**: [https://venturepilot-ai-jtqc.onrender.com](https://venturepilot-ai-jtqc.onrender.com)
 
-[![Deploy to Render](https://render.com/images/deploy-to-render.svg)](https://render.com/deploy?repo=https://github.com/sakthiganesan06/VenturePilot-AI)
-
 ---
 
 ## ✨ Features
